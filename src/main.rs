@@ -1,4 +1,5 @@
 use std::{
+    fs,
     io::{BufRead, BufReader, Write},
     net::{TcpListener, TcpStream},
 };
@@ -51,8 +52,16 @@ fn handle_connection(mut stream: TcpStream) {
 
         So, we are currently writing a success response with a 200 status code - no header or body.
     */
-    let success_response_data: &str = "HTTP/1.1 200 OK\r\n\r\n";
+    let status_line: &str = "HTTP/1.1 200 OK";
+    let contents = fs::read_to_string("hello.html").unwrap();
 
-    // Writing the response as bytes back to stream to resturn to the client
+    // To ensure a valid HTTP response, we add the Content-Length header which is set to the size of our response body, in this case the size of hello.html
+    let length = contents.len();
+
+    // Building the success response
+    let success_response_data =
+        format!("{status_line}\r\nContent-Length: {length}\r\n\r\n{contents}");
+
+    // Writing the response as bytes back to stream to return to the client
     stream.write_all(success_response_data.as_bytes()).unwrap();
 }
