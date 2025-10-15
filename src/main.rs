@@ -8,36 +8,39 @@ use std::{
     time::Duration,
 };
 
-use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
+use std::sync::atomic::{AtomicBool, Ordering};
 
 fn main() {
     // Binding a TCP listener to port 7878
     let listner = TcpListener::bind("127.0.0.1:7878").unwrap();
     let pool = ThreadPool::new(4);
-    
+
     // Create a flag to signal shutdown
     let shutdown = Arc::new(AtomicBool::new(false));
     let shutdown_clone = Arc::clone(&shutdown);
-    
+
     // Set up signal handler for graceful shutdown
     ctrlc::set_handler(move || {
         println!("Received shutdown signal...");
         shutdown_clone.store(true, Ordering::SeqCst);
-    }).expect("Error setting Ctrl+C handler");
-    
+    })
+    .expect("Error setting Ctrl+C handler");
+
     // Make listener non-blocking so we can check shutdown flag
-    listner.set_nonblocking(true).expect("Failed to set non-blocking");
-    
+    listner
+        .set_nonblocking(true)
+        .expect("Failed to set non-blocking");
+
     println!("Server started. Press Ctrl+C to shutdown gracefully.");
-    
+
     loop {
         // Check if we should shutdown
         if shutdown.load(Ordering::SeqCst) {
             println!("Shutting down server...");
             break;
         }
-        
+
         // Try to accept a connection
         match listner.accept() {
             Ok((stream, _)) => {
@@ -53,11 +56,10 @@ fn main() {
             }
         }
     }
-    
+
     // ThreadPool will be dropped here, showing shutdown messages
     println!("Server shutdown complete.");
 }
-
 
 fn handle_connection(mut stream: TcpStream) {
     // Creating an instance of BufReader to using the TcpStream passed in the function to exctract the information from the request.
