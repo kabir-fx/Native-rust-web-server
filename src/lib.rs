@@ -49,7 +49,7 @@ pub struct ThreadPool {
     /// Vector of all the worker threads available for execution
     worker_instances: Vec<Worker>,
 
-    ///
+    /// MPSC channel for threads to communicate amongst each other
     sender: Option<mpsc::Sender<Job>>,
 }
 
@@ -60,7 +60,7 @@ impl ThreadPool {
         // The `new` function will panic if the size is zero.
         assert!(size > 0);
 
-        // Create a MPSC channel for threads to communicate amongst each other
+        // Initialize the channel
         let (sender, receiver) = mpsc::channel();
         // Individual threads
         let receiver = Arc::new(Mutex::new(receiver));
@@ -110,7 +110,7 @@ impl ThreadPool {
     }
 }
 
-// Graceful shutdown handling for threads
+/// Graceful shutdown handling for threads
 impl Drop for ThreadPool {
     fn drop(&mut self) {
         // Consumes the channel - takes the value out of the option, leaving a None in its place
