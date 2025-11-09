@@ -23,8 +23,8 @@ A simple, multi-threaded HTTP web server built in Rust from scratch, featuring a
 Clone the repository and build the project:
 
 ```bash
-git clone <repository-url>
-cd rust-web-server
+git clone https://github.com/kabir-fx/Native-rust-web-server.git
+cd Native-rust-web-server
 cargo build --release
 ```
 
