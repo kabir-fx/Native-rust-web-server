@@ -38,12 +38,6 @@ Start the server with:
 cargo run
 ```
 
-The server will start on `http://127.0.0.1:7878` and display:
-
-```
-Server started. Press Ctrl+C to shutdown gracefully.
-```
-
 ### Testing the Server
 
 Once running, you can test the server with curl or a web browser:
@@ -115,45 +109,6 @@ The server uses a custom thread pool (`ThreadPool`) for handling concurrent conn
 
 - **`ctrlc`**: Cross-platform signal handling for graceful shutdown
 
-## Development
-
-### Project Structure
-
-```
-src/
-├── lib.rs          # Thread pool implementation
-└── main.rs         # Server main loop and connection handling
-
-Static files:
-├── hello.html      # Welcome page
-└── 404.html        # Error page
-```
-
-### Building for Development
-
-```bash
-cargo build
-```
-
-### Running Tests
-
-```bash
-cargo test
-```
-
-### Code Quality
-
-```bash
-# Check for issues
-cargo check
-
-# Format code
-cargo fmt
-
-# Lint code
-cargo clippy
-```
-
 ## Performance Considerations
 
 - **Thread Pool Size**: Currently configured with 4 worker threads
@@ -183,11 +138,3 @@ This project demonstrates:
 - Graceful shutdown patterns
 - Error handling in concurrent systems
 - Cargo workspace organization
-
-## Contributing
-
-Feel free to submit issues and enhancement requests!
-
-## License
-
-This project is open source and available under the [MIT License](LICENSE).
